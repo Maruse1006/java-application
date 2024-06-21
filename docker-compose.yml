@@ -1,6 +1,6 @@
 version: "3.6"
 services:
-  app:
+  web:
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,14 +9,22 @@ services:
     working_dir: /app
     volumes:
       - .:/workspace
+      - ./src:/app/src
+      - ./build.gradle:/app/build.gradle
+      - ./settings.gradle:/app/settings.gradle
+      - ./gradle:/app/gradle
+      - ./gradlew:/app/gradlew
+      - ./gradlew.bat:/app/gradlew.bat
+      - ./gradle.properties:/app/gradle.properties
     ports:
-      - 8080:8080 # 通常実行用
-      - 5050:5050 # デバッグ用
-      - 35729:35729 # LiveReload用
+      - 8080:8080
+      - 5050:5050
+      - 35729:35729
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydatabase
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
+      - JAVA_OPTS=-Dspring.devtools.restart.enabled=true -Dspring.devtools.livereload.enabled=true
 
   db:
     image: postgres:13
