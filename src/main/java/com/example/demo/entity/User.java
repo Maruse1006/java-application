@@ -1,4 +1,4 @@
-package com.example.demo.demo.entity;
+package com.example.demo.entity;
 
 import javax.persistence.*;
 
@@ -30,7 +30,7 @@ public class User {
     }
 
     public String getUsername(){
-        ]return username;
+        return username;
     }
 
     public void setUsername(String username){
