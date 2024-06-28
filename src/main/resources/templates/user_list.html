@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Management</title>
+</head>
+<body>
+    <h1>User Management</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}">ID</td>
+                <td th:text="${user.username}">Username</td>
+                <td th:text="${user.email}">Email</td>
+                <td>
+                    <form th:action="@{/users/edit/{id}(id=${user.id})}" method="post">
+                        <input type="text" th:name="username" th:value="${user.username}" placeholder="Username"/>
+                        <input type="text" th:name="email" th:value="${user.email}" placeholder="Email"/>
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
