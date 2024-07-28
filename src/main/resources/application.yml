@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  security:
+    secret-key: your-secret-key
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/oauth2/jwks
