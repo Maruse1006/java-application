@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.List;
 
@@ -21,12 +23,18 @@ public class UserController {
         return "register";
     }
 
-    @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, Model model) {
-        userService.saveUser(user);
-        model.addAttribute("message", "User registered successfully");
-        return "result";
-    }
+    @Autowired
+private PasswordEncoder passwordEncoder;
+
+@PostMapping("/register")
+public String registerUser(@ModelAttribute User user, Model model) {
+    // パスワードをエンコードしてセットする
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    
+    userService.saveUser(user);
+    model.addAttribute("message", "User registered successfully");
+    return "result";
+}
 
     @GetMapping("/users")
     public String listUsers(Model model) {

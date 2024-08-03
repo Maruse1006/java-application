@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -45,32 +46,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/hello/**").permitAll()
-                .antMatchers("/user/**").hasRole("USER")
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/login", "/register", "/hello/**").permitAll()
+                .antMatchers("/homepage").authenticated() // 
                 .anyRequest().authenticated()
-            .and()
-            .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint())
-                .accessDeniedHandler(accessDeniedHandler())
             .and()
             .formLogin()
                 .loginProcessingUrl("/login").permitAll()
-                .usernameParameter("email")
-                .passwordParameter("pass")
                 .successHandler(authenticationSuccessHandler())
-                .failureHandler(authenticationFailureHandler())
             .and()
             .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessHandler(logoutSuccessHandler())
             .and()
-            .csrf().disable()
-            .addFilterBefore(tokenFilter(), UsernamePasswordAuthenticationFilter.class)
-            .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .csrf().disable();
     }
+    
+
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -108,4 +98,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     LogoutSuccessHandler logoutSuccessHandler() {
         return new HttpStatusReturningLogoutSuccessHandler();
     }
+
+    
 }
