@@ -27,7 +27,9 @@ dependencies {
     implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'com.auth0:java-jwt:3.18.1'  // JWTライブラリの追加
     implementation 'org.springframework:spring-context'
-    
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+implementation 'ch.qos.logback:logback-classic:1.2.10'
+
 
 }
 

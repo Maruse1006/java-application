@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.example.demo.jwt.JWTBuilder; // 追加
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,15 +53,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .formLogin()
                 .loginProcessingUrl("/login").permitAll()
-                .successHandler(authenticationSuccessHandler())
+                .successHandler(authenticationSuccessHandler(jwtBuilder())) // 修正済み
             .and()
             .logout()
                 .logoutUrl("/logout")
             .and()
             .csrf().disable();
     }
-    
-
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -85,8 +84,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new SimpleAuthenticationSuccessHandler(secretKey);
+    AuthenticationSuccessHandler authenticationSuccessHandler(JWTBuilder jwtBuilder) {
+        return new SimpleAuthenticationSuccessHandler(jwtBuilder); // 修正済み
     }
 
     @Bean
@@ -99,5 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new HttpStatusReturningLogoutSuccessHandler();
     }
 
-    
+    @Bean
+    public JWTBuilder jwtBuilder() { // 追加
+        return new JWTBuilder();
+    }
 }
