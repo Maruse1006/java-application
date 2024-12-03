@@ -22,15 +22,13 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.flywaydb:flyway-core:8.0.4'
-    implementation 'org.springframework.security:spring-security-oauth2-authorization-server:1.1.0'  // 追加
+    implementation 'org.springframework.security:spring-security-oauth2-authorization-server:1.1.0'  // OAuth2認可サーバ
     implementation 'org.springframework.security:spring-security-oauth2-resource-server'
     implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'com.auth0:java-jwt:3.18.1'  // JWTライブラリの追加
     implementation 'org.springframework:spring-context'
     implementation 'org.slf4j:slf4j-api:1.7.32'
-implementation 'ch.qos.logback:logback-classic:1.2.10'
-
-
+    implementation 'ch.qos.logback:logback-classic:1.2.10'
 }
 
 tasks.named('test') {
@@ -47,4 +45,29 @@ flyway {
 // メインクラスの指定
 springBoot {
     mainClass.set('com.example.demo.JavaAppApplication')
+}
+
+jar { // jarの生成を無効化（不要なら削除可能）
+    enabled = false
+}
+
+bootJar { // 出力されるJarの設定
+    archiveBaseName.set("sample")
+    archiveVersion.set("0.0.1")
+    archiveClassifier.set("SNAPSHOT")
+    archiveExtension.set("jar")
+    baseName = 'lyricWallSpring'
+    version =  '0.1.0'
+}
+
+bootRun { // デバッグ用の設定
+    systemProperties = System.properties // GradleのシステムプロパティをJavaに渡す
+    jvmArgs = ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
+}
+
+// 新規タスク: Cleanの前にデバッグ用ログを出力
+tasks.named('clean') {
+    doFirst {
+        println "Cleaning up build directories..."
+    }
 }
