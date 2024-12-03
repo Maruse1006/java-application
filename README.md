@@ -29,3 +29,24 @@ HTTPセキュリティの設定 (configure(HttpSecurity http) メソッド)
 今回の設定では、以下のセキュリティが適用されます:
 すべてのリクエストが認証を必要とする (authorizeRequests().anyRequest().authenticated()).
 HTTP Basic 認証を使用する (httpBasic()).
+
+
+
+デバック設定について
+.vscodeの中にあるlaunch.jsonの中を下記に設定
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "java (Attach)",
+            "request": "attach",
+            "hostName": "192.168.3.160",
+            "port": 5006
+        }
+    ]
+}
+
+
+```
